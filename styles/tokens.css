@@ -1,0 +1,78 @@
+/**
+ * 디자인 토큰 — HTML 프로토타입 C 객체와 1:1 대응.
+ *
+ * HTML 프로토타입 색상 기준:
+ *   bg: '#F7F6F2'  surface: '#FFFFFF'  border: '#E5E0D5'  borderLight: '#F0EDE6'
+ *   text: '#1A1A2E'  muted: '#6B7080'  light: '#A0A3AE'
+ *   accent: '#1D4ED8'  accentLight: '#EFF4FF'  accentBorder: '#BFDBFE'
+ *   green: '#059669'  greenLight: '#D1FAE5'
+ *   amber: '#D97706'  amberLight: '#FEF3C7'
+ *   red: '#DC2626'  redLight: '#FEE2E2'
+ *   orange: '#EA580C'  orangeLight: '#FFF7ED'
+ */
+
+:root {
+  /* ── 기본 배경 ──────────────────────────────────── */
+  --c-bg:           #F7F6F2;
+  --c-surface:      #FFFFFF;
+  --c-bg-muted:     #F0EDE6;   /* borderLight / 입력 배경 */
+
+  /* ── 보더 ───────────────────────────────────────── */
+  --c-border:       #E5E0D5;
+  --c-border-light: #F0EDE6;
+
+  /* ── 텍스트 ─────────────────────────────────────── */
+  --c-text:         #1A1A2E;
+  --c-muted:        #6B7080;
+  --c-light:        #A0A3AE;
+
+  /* ── 브랜드 (파란 계열) ─────────────────────────── */
+  --c-accent:        #1D4ED8;
+  --c-accent-light:  #EFF4FF;
+  --c-accent-border: #BFDBFE;
+
+  /* ── 의미색 ──────────────────────────────────────  */
+  --c-green:        #059669;
+  --c-green-light:  #D1FAE5;
+  --c-amber:        #D97706;
+  --c-amber-light:  #FEF3C7;
+  --c-red:          #DC2626;
+  --c-red-light:    #FEE2E2;
+  --c-orange:       #EA580C;
+  --c-orange-light: #FFF7ED;
+
+  /* ── Match 판정 (HTML Badge 색상과 동일) ────────── */
+  /* 동일 = green, 유사 = amber, 차이 = red           */
+  --c-match-same:        var(--c-green);
+  --c-match-same-bg:     var(--c-green-light);
+  --c-match-similar:     var(--c-amber);
+  --c-match-similar-bg:  var(--c-amber-light);
+  --c-match-diff:        var(--c-red);
+  --c-match-diff-bg:     var(--c-red-light);
+
+  /* ── Agreement ──────────────────────────────────── */
+  --c-agree:         var(--c-green);
+  --c-agree-bg:      var(--c-green-light);
+  --c-disagree:      var(--c-orange);
+  --c-disagree-bg:   var(--c-orange-light);
+
+  /* ── Diff 렌더러 ────────────────────────────────── */
+  --c-diff-add:     var(--c-green);
+  --c-diff-add-bg:  var(--c-green-light);
+  --c-diff-del:     var(--c-red);
+  --c-diff-del-bg:  var(--c-red-light);
+
+  /* ── 레이아웃 ───────────────────────────────────── */
+  --sidebar-w:      218px;
+  --topnav-h:       52px;
+  --card-radius:    10px;
+
+  /* ── 그림자 ─────────────────────────────────────── */
+  --shadow-card:  0 1px 8px rgba(0,0,0,.05);
+  --shadow-panel: 0 8px 40px rgba(0,0,0,.14);
+
+  /* ── 폰트 ───────────────────────────────────────── */
+  --font-sans: 'Noto Sans KR', system-ui, sans-serif;
+  --font-serif: 'Noto Serif KR', Georgia, serif;
+  --font-mono: 'IBM Plex Mono', 'JetBrains Mono', monospace;
+}

@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "patent-frontend",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["cross-env", "NEXT_PUBLIC_USE_MOCK=true", "npm", "run", "dev"],
+      "port": 3000
+    }
+  ]
+}

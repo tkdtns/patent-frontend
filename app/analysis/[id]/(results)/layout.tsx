@@ -21,7 +21,8 @@ export default function ResultsLayout({ children, params }: Props) {
         <Sidebar applicationNumber={applicationNumber} />
         <main
           id="main-content"
-          className="flex-1 ml-sidebar min-h-screen overflow-y-auto px-9 py-7"
+          className="flex-1 min-h-screen overflow-y-auto pr-9 py-7"
+          style={{ paddingLeft: 'calc(var(--sidebar-w) + 2.25rem)' }}
         >
           {children}
         </main>

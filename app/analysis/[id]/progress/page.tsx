@@ -46,7 +46,7 @@ export default function ProgressPage() {
             분석 진행 중...
           </h2>
           <p className="text-[13px] text-muted">
-            {applicationNumber} · 약 30~60초 소요
+            {applicationNumber} · 약 20-30분 소요
           </p>
         </header>
 

@@ -33,13 +33,13 @@ export function StrategyPanel({ strategy }: StrategyPanelProps) {
         {TITLES[strategy.strategy_type]}
       </h3>
 
-      <p className="text-[13.5px] text-text leading-[1.85] mb-4">{strategy.rationale}</p>
+      <p className="text-[13.5px] text-text leading-[1.85] mb-4 break-keep">{strategy.rationale}</p>
 
       <div className="bg-bg rounded-lg px-4 py-3.5 mb-4">
         <div className="text-[10px] font-bold text-muted uppercase tracking-wide mb-1.5">
           제안 행동 Proposed Action
         </div>
-        <p className="text-[13px] text-text leading-[1.7]">{strategy.proposed_action}</p>
+        <p className="text-[13px] text-text leading-[1.7] break-keep">{strategy.proposed_action}</p>
       </div>
 
       <LeveragedDifferences elementIds={strategy.leveraged_differences} />

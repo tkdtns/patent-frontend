@@ -17,10 +17,7 @@ export default function StrategyPage() {
   const { offensive, defensive } = analysis.strategy;
 
   return (
-    <div
-      className="mx-auto animate-fadeIn"
-      style={{ maxWidth: mode === 'split' ? 1060 : 740 }}
-    >
+    <div className="w-full animate-fadeIn">
       <div className="flex items-center justify-between mb-5">
         <div>
           <h2 className="font-serif text-[20px] font-bold text-text mb-1">공격·방어 전략</h2>
@@ -30,13 +27,22 @@ export default function StrategyPage() {
       </div>
 
       {mode === 'split' && (
-        <div className="flex gap-4">
+        /* 좁은 화면에서 세로 스택, 넓은 화면에서 나란히 */
+        <div className="flex flex-col xl:flex-row gap-4">
           <StrategyPanel strategy={offensive} />
           <StrategyPanel strategy={defensive} />
         </div>
       )}
-      {mode === 'off'  && <StrategyPanel strategy={offensive} />}
-      {mode === 'def'  && <StrategyPanel strategy={defensive} />}
+      {mode === 'off'  && (
+        <div className="max-w-[740px]">
+          <StrategyPanel strategy={offensive} />
+        </div>
+      )}
+      {mode === 'def'  && (
+        <div className="max-w-[740px]">
+          <StrategyPanel strategy={defensive} />
+        </div>
+      )}
     </div>
   );
 }

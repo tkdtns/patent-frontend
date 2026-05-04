@@ -14,14 +14,18 @@ export function simulateProgress(
   const timers: ReturnType<typeof setTimeout>[] = [];
 
   let elapsed = 0;
+  let prevRatio = 0;           // 이전 단계 완료 ratio 추적 (역방향 방지)
   for (const step of MOCK_PROGRESS_STEPS) {
     elapsed += step.durationMs;
     const { step: name, ratio, durationMs } = step;
 
+    // mid ratio = 이전 단계 ratio → 현재 단계 ratio 의 중간값 (절대 역방향 없음)
+    const midRatio = prevRatio + (ratio - prevRatio) * 0.5;
+
     // 진행 중 이벤트
     const midTimer = setTimeout(() => {
       if (cancelled) return;
-      callbacks.onEvent({ step: name, ratio: ratio * 0.5, done: false });
+      callbacks.onEvent({ step: name, ratio: midRatio, done: false });
     }, elapsed - durationMs / 2);
 
     // 완료 이벤트
@@ -33,6 +37,7 @@ export function simulateProgress(
     }, elapsed);
 
     timers.push(midTimer, doneTimer);
+    prevRatio = ratio;
   }
 
   return () => {

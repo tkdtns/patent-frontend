@@ -74,6 +74,70 @@ export const MOCK_ANALYSIS: AnalysisResult = {
           },
         ],
       },
+      {
+        claim_number: 4,
+        claim_type: '종속항',
+        depends_on: [1],
+        preamble: '제1항에 있어서,',
+        original_text:
+          '제1항에 있어서, 상기 카본블랙 슬러리는 카본블랙의 농도가 20~40wt%인 것을 특징으로 하는 웨트 마스터배치의 제조방법.',
+        elements: [
+          {
+            element_id: '4-A',
+            element_order: 1,
+            label: '슬러리 농도 한정',
+            text: '카본블랙 슬러리의 카본블랙 농도 20~40wt%',
+          },
+        ],
+      },
+      {
+        claim_number: 5,
+        claim_type: '종속항',
+        depends_on: [1],
+        preamble: '제1항에 있어서,',
+        original_text:
+          '제1항에 있어서, 상기 응집제는 황산인 것을 특징으로 하는 웨트 마스터배치의 제조방법.',
+        elements: [
+          {
+            element_id: '5-A',
+            element_order: 1,
+            label: '응집제 종류 한정',
+            text: '응집제가 황산인 것',
+          },
+        ],
+      },
+      {
+        claim_number: 6,
+        claim_type: '종속항',
+        depends_on: [4],
+        preamble: '제4항에 있어서,',
+        original_text:
+          '제4항에 있어서, 상기 혼합 단계는 40~60°C에서 수행되는 것을 특징으로 하는 웨트 마스터배치의 제조방법.',
+        elements: [
+          {
+            element_id: '6-A',
+            element_order: 1,
+            label: '혼합 온도 한정',
+            text: '혼합 단계를 40~60°C에서 수행하는 것',
+          },
+        ],
+      },
+      {
+        claim_number: 7,
+        claim_type: '종속항',
+        depends_on: [4],
+        preamble: '제4항에 있어서,',
+        original_text:
+          '제4항에 있어서, 상기 카본블랙의 평균 입경은 10~100nm인 것을 특징으로 하는 웨트 마스터배치의 제조방법.',
+        elements: [
+          {
+            element_id: '7-A',
+            element_order: 1,
+            label: '카본블랙 입경 한정',
+            text: '카본블랙 평균 입경 10~100nm',
+          },
+        ],
+      },
     ],
   },
 
@@ -90,6 +154,42 @@ export const MOCK_ANALYSIS: AnalysisResult = {
         paragraph_ids: ['0024'],
         rationale: '황산 응집제 사용 효과가 [0024]에 기재',
         confidence: 0.88,
+      },
+      {
+        element_id: '1-C',
+        paragraph_ids: ['0029', '0030'],
+        rationale: '여과 분리 단계의 구체적 조건이 [0029]에 기재',
+        confidence: 0.85,
+      },
+      {
+        element_id: '1-D',
+        paragraph_ids: ['0035'],
+        rationale: '건조 단계 온도 및 시간 조건이 [0035]에 기재',
+        confidence: 0.90,
+      },
+      {
+        element_id: '4-A',
+        paragraph_ids: ['0018', '0019'],
+        rationale: '슬러리 농도 20~40wt% 임계 범위 및 실험 데이터가 [0018]~[0019]에 기재',
+        confidence: 0.95,
+      },
+      {
+        element_id: '5-A',
+        paragraph_ids: ['0024', '0025'],
+        rationale: '황산 응집제의 입도 분포 제어 효과가 [0024]~[0025]에 기재',
+        confidence: 0.91,
+      },
+      {
+        element_id: '6-A',
+        paragraph_ids: ['0021', '0022'],
+        rationale: '혼합 온도 40~60°C 범위의 분산성 개선 효과가 [0021]에 기재',
+        confidence: 0.87,
+      },
+      {
+        element_id: '7-A',
+        paragraph_ids: ['0010', '0011'],
+        rationale: '카본블랙 평균 입경 10~100nm 범위가 [0010]에 정의됨',
+        confidence: 0.89,
       },
     ],
   },
@@ -158,6 +258,89 @@ export const MOCK_ANALYSIS: AnalysisResult = {
           },
         ],
       },
+      /* ── 청구항 4: 슬러리 농도 20~40wt% ── */
+      {
+        target_claim_number: 4,
+        rows: [
+          {
+            element_id: '4-A',
+            element_text: '카본블랙 슬러리 농도 20~40wt%',
+            prior_art_id: '인용발명1',
+            prior_art_element: null,
+            prior_art_location: null,
+            our_match: '차이',
+            our_explanation:
+              '인용발명1은 슬러리 농도를 특정하지 않으며 20~40wt% 수치범위를 전혀 개시하지 않음. 해당 범위는 분산성·가공성에 임계적 의의를 가짐.',
+            examiner_match: '동일',
+            examiner_explanation: '슬러리 혼합 단계가 실질적으로 동일함',
+            agreement: '불일치',
+            disagreement_rationale:
+              '심사관은 수치범위의 임계적 의의를 간과하고 단순 혼합 단계와 동일하게 판정하였으나, 농도 한정이 없는 인용발명1과는 명백히 구별됨.',
+          },
+        ],
+      },
+      /* ── 청구항 5: 황산 응집제 ── */
+      {
+        target_claim_number: 5,
+        rows: [
+          {
+            element_id: '5-A',
+            element_text: '응집제 — 황산',
+            prior_art_id: '인용발명1',
+            prior_art_element: '응집제 — 염산',
+            prior_art_location: '청구항 1, 단락 [0031]',
+            our_match: '차이',
+            our_explanation:
+              '본 발명은 황산을 응집제로 사용하여 균일한 입도 분포를 달성하나, 인용발명1은 염산을 사용하여 입도 분포 편차가 크게 나타남. 응집제 종류에 따른 입도 제어 효과가 상이함.',
+            examiner_match: '유사',
+            examiner_explanation: '응집제 첨가 단계가 유사함',
+            agreement: '불일치',
+            disagreement_rationale:
+              '황산과 염산은 이온화 특성이 달라 응집물의 입도 분포에 기술적으로 상이한 효과를 나타내므로 단순 유사 판정은 부당함.',
+          },
+        ],
+      },
+      /* ── 청구항 6: 혼합 온도 40~60°C ── */
+      {
+        target_claim_number: 6,
+        rows: [
+          {
+            element_id: '6-A',
+            element_text: '혼합 온도 40~60°C',
+            prior_art_id: '인용발명1',
+            prior_art_element: null,
+            prior_art_location: null,
+            our_match: '차이',
+            our_explanation:
+              '인용발명1은 혼합 온도를 특정하지 않으며, 40~60°C 임계 온도 범위를 개시하지 않음. 해당 온도 범위에서 분산 균일성이 현저히 향상됨.',
+            examiner_match: '차이',
+            examiner_explanation: '인용발명1에 혼합 온도 조건 미개시',
+            agreement: '일치',
+            disagreement_rationale: null,
+          },
+        ],
+      },
+      /* ── 청구항 7: 카본블랙 입경 10~100nm ── */
+      {
+        target_claim_number: 7,
+        rows: [
+          {
+            element_id: '7-A',
+            element_text: '카본블랙 평균 입경 10~100nm',
+            prior_art_id: '인용발명2',
+            prior_art_element: '카본블랙 입경 (범위 미특정)',
+            prior_art_location: '단락 [0015]',
+            our_match: '차이',
+            our_explanation:
+              '인용발명2는 카본블랙 입경을 단락 [0015]에서 언급하나 구체적 수치범위를 특정하지 않음. 10~100nm 범위는 분산성과 보강 효과의 균형을 위한 임계적 범위임.',
+            examiner_match: '유사',
+            examiner_explanation: '카본블랙 입경이 일반적으로 유사한 범위에 해당',
+            agreement: '불일치',
+            disagreement_rationale:
+              '인용발명2는 구체적 수치를 특정하지 않아 임계 범위의 기술적 의의를 개시하지 않으므로 유사 판정은 부당함.',
+          },
+        ],
+      },
     ],
   },
 
@@ -166,17 +349,17 @@ export const MOCK_ANALYSIS: AnalysisResult = {
       strategy_type: '공격',
       rationale:
         "심사관은 구성요소 1-A(카본블랙 슬러리 혼합 단계)를 인용발명1과 '동일'로 판정하였으나, 본 발명의 핵심인 슬러리 농도(20~40wt%)는 인용발명1에 전혀 개시되어 있지 않습니다. 이는 단순한 수치한정이 아니라 분산성·가공성에 임계적 의의를 갖는 요건입니다. 구성요소 1-A에 대한 심사관의 '동일' 판정은 명백히 부당하며, 이를 의견서에서 정면으로 반박하여 보정 없이 거절 이유를 해소할 수 있습니다.",
-      leveraged_differences: ['1-A'],
+      leveraged_differences: ['1-A', '4-A', '5-A'],
       proposed_action:
-        '의견서에서 슬러리 농도 수치한정(20~40wt%)의 기술적·임계적 의의를 실험 데이터로 뒷받침하며, 심사관의 구성비교표 오류를 지적. 청구항 보정 없이 거절 이유 해소 시도.',
+        '의견서에서 슬러리 농도(20~40wt%, 청구항 4), 황산 응집제(청구항 5), 혼합 온도(40~60°C, 청구항 6)의 임계적 의의를 실험 데이터로 뒷받침하며 심사관의 구성비교표 오류를 지적. 청구항 보정 없이 거절 이유 해소 시도.',
     },
     defensive: {
       strategy_type: '방어',
       rationale:
         '공격 전략이 받아들여지지 않을 경우를 대비하여 독립항에 추가 한정을 가하는 방어적 보정안을 동시에 준비합니다. 종속항 제2항의 슬러리 농도(20~40wt%)와 제3항의 응집제(황산)를 독립항으로 흡수하여 선행기술과의 차이를 명시적으로 확보합니다.',
-      leveraged_differences: ['1-A', '1-B'],
+      leveraged_differences: ['1-A', '1-B', '4-A', '5-A', '7-A'],
       proposed_action:
-        "청구항 1에 '슬러리 농도 20~40wt%' 및 '황산 응집제' 조건을 한정하는 보정서 제출. 상세설명 [0018], [0024] 단락을 뒷받침 근거로 활용.",
+        "청구항 1에 슬러리 농도(20~40wt%) 및 황산 응집제 조건 흡수 보정. 청구항 6(혼합 온도), 청구항 7(입경)은 독립된 한정 사항으로 유지. 상세설명 [0018], [0024] 단락을 뒷받침 근거로 활용.",
     },
   },
 
@@ -184,7 +367,7 @@ export const MOCK_ANALYSIS: AnalysisResult = {
     offensive_draft: {
       strategy_type: '공격',
       overall_explanation:
-        "청구항을 보정하지 않고 의견서만으로 대응합니다. 구성요소 1-A의 슬러리 농도 수치범위(20~40wt%)는 인용발명1에 일절 개시되어 있지 않으며, 심사관의 '동일' 판정은 명세서 내용을 간과한 오류입니다.",
+        "청구항을 보정하지 않고 의견서만으로 대응합니다. 구성요소 1-A·4-A의 슬러리 농도 수치범위(20~40wt%), 5-A의 황산 응집제, 7-A의 입경 범위(10~100nm)는 인용발명에 일절 개시되어 있지 않으며, 심사관 판정은 명세서를 간과한 오류입니다.",
       amended_claims: [
         {
           claim_number: 1,
@@ -196,12 +379,52 @@ export const MOCK_ANALYSIS: AnalysisResult = {
           diff: null,
           amended_text: null,
         },
+        {
+          claim_number: 4,
+          is_same: true,
+          diff_summary: '보정 없음 (청구항 원문 유지)',
+          spec_basis: ['0018', '0019'],
+          original_text:
+            '제1항에 있어서, 상기 카본블랙 슬러리는 카본블랙의 농도가 20~40wt%인 것을 특징으로 하는 웨트 마스터배치의 제조방법.',
+          diff: null,
+          amended_text: null,
+        },
+        {
+          claim_number: 5,
+          is_same: true,
+          diff_summary: '보정 없음 (청구항 원문 유지)',
+          spec_basis: ['0024', '0025'],
+          original_text:
+            '제1항에 있어서, 상기 응집제는 황산인 것을 특징으로 하는 웨트 마스터배치의 제조방법.',
+          diff: null,
+          amended_text: null,
+        },
+        {
+          claim_number: 6,
+          is_same: true,
+          diff_summary: '보정 없음 (청구항 원문 유지)',
+          spec_basis: ['0021', '0022'],
+          original_text:
+            '제4항에 있어서, 상기 혼합 단계는 40~60°C에서 수행되는 것을 특징으로 하는 웨트 마스터배치의 제조방법.',
+          diff: null,
+          amended_text: null,
+        },
+        {
+          claim_number: 7,
+          is_same: true,
+          diff_summary: '보정 없음 (청구항 원문 유지)',
+          spec_basis: ['0010', '0011'],
+          original_text:
+            '제4항에 있어서, 상기 카본블랙의 평균 입경은 10~100nm인 것을 특징으로 하는 웨트 마스터배치의 제조방법.',
+          diff: null,
+          amended_text: null,
+        },
       ],
     },
     defensive_draft: {
       strategy_type: '방어',
       overall_explanation:
-        '청구항 1에 슬러리 농도 범위(20~40wt%)와 응집제 조건(황산)을 명시적으로 한정하여 인용발명1과의 기술적 차이를 강화합니다. 보정 범위는 최초 출원 명세서 단락 [0018], [0024]에 의해 충분히 뒷받침됩니다.',
+        '청구항 1에 슬러리 농도(20~40wt%)·황산 응집제를 흡수하여 선행기술과의 차이를 강화합니다. 청구항 4·5는 독립항 보정에 흡수되어 삭제하고, 청구항 6·7은 보정된 청구항 1에 의존하도록 항번을 조정합니다. 보정 범위는 명세서 단락 [0018], [0024]에 의해 충분히 뒷받침됩니다.',
       amended_claims: [
         {
           claim_number: 1,
@@ -213,19 +436,69 @@ export const MOCK_ANALYSIS: AnalysisResult = {
           diff: [
             { t: 'del', s: '카본블랙 슬러리' },
             { t: 'add', s: '농도 20~40wt%의 카본블랙 슬러리' },
-            {
-              t: 'same',
-              s: '와 고무 라텍스를 혼합하여 혼합물을 제조하는 단계; 상기 혼합물에 ',
-            },
+            { t: 'same', s: '와 고무 라텍스를 혼합하여 혼합물을 제조하는 단계; 상기 혼합물에 ' },
             { t: 'del', s: '응집제' },
             { t: 'add', s: '황산 응집제' },
-            {
-              t: 'same',
-              s: '를 첨가하여 응집물을 형성하는 단계; 상기 응집물을 여과하여 분리하는 단계; 및 상기 분리된 응집물을 건조하는 단계;를 포함하는 웨트 마스터배치의 제조방법.',
-            },
+            { t: 'same', s: '를 첨가하여 응집물을 형성하는 단계; 상기 응집물을 여과하여 분리하는 단계; 및 상기 분리된 응집물을 건조하는 단계;를 포함하는 웨트 마스터배치의 제조방법.' },
           ],
           amended_text:
             '농도 20~40wt%의 카본블랙 슬러리와 고무 라텍스를 혼합하여 혼합물을 제조하는 단계; 상기 혼합물에 황산 응집제를 첨가하여 응집물을 형성하는 단계; 상기 응집물을 여과하여 분리하는 단계; 및 상기 분리된 응집물을 건조하는 단계;를 포함하는 웨트 마스터배치의 제조방법.',
+        },
+        {
+          claim_number: 4,
+          is_same: false,
+          diff_summary: '청구항 1 흡수로 삭제 처리',
+          spec_basis: ['0018'],
+          original_text:
+            '제1항에 있어서, 상기 카본블랙 슬러리는 카본블랙의 농도가 20~40wt%인 것을 특징으로 하는 웨트 마스터배치의 제조방법.',
+          diff: [
+            { t: 'del', s: '제1항에 있어서, 상기 카본블랙 슬러리는 카본블랙의 농도가 20~40wt%인 것을 특징으로 하는 웨트 마스터배치의 제조방법.' },
+            { t: 'add', s: '(삭제) — 청구항 1에 흡수' },
+          ],
+          amended_text: '(삭제)',
+        },
+        {
+          claim_number: 5,
+          is_same: false,
+          diff_summary: '청구항 1 흡수로 삭제 처리',
+          spec_basis: ['0024'],
+          original_text:
+            '제1항에 있어서, 상기 응집제는 황산인 것을 특징으로 하는 웨트 마스터배치의 제조방법.',
+          diff: [
+            { t: 'del', s: '제1항에 있어서, 상기 응집제는 황산인 것을 특징으로 하는 웨트 마스터배치의 제조방법.' },
+            { t: 'add', s: '(삭제) — 청구항 1에 흡수' },
+          ],
+          amended_text: '(삭제)',
+        },
+        {
+          claim_number: 6,
+          is_same: false,
+          diff_summary: '인용항을 제4항→제1항으로 변경',
+          spec_basis: ['0021', '0022'],
+          original_text:
+            '제4항에 있어서, 상기 혼합 단계는 40~60°C에서 수행되는 것을 특징으로 하는 웨트 마스터배치의 제조방법.',
+          diff: [
+            { t: 'del', s: '제4항' },
+            { t: 'add', s: '제1항' },
+            { t: 'same', s: '에 있어서, 상기 혼합 단계는 40~60°C에서 수행되는 것을 특징으로 하는 웨트 마스터배치의 제조방법.' },
+          ],
+          amended_text:
+            '제1항에 있어서, 상기 혼합 단계는 40~60°C에서 수행되는 것을 특징으로 하는 웨트 마스터배치의 제조방법.',
+        },
+        {
+          claim_number: 7,
+          is_same: false,
+          diff_summary: '인용항을 제4항→제1항으로 변경',
+          spec_basis: ['0010', '0011'],
+          original_text:
+            '제4항에 있어서, 상기 카본블랙의 평균 입경은 10~100nm인 것을 특징으로 하는 웨트 마스터배치의 제조방법.',
+          diff: [
+            { t: 'del', s: '제4항' },
+            { t: 'add', s: '제1항' },
+            { t: 'same', s: '에 있어서, 상기 카본블랙의 평균 입경은 10~100nm인 것을 특징으로 하는 웨트 마스터배치의 제조방법.' },
+          ],
+          amended_text:
+            '제1항에 있어서, 상기 카본블랙의 평균 입경은 10~100nm인 것을 특징으로 하는 웨트 마스터배치의 제조방법.',
         },
       ],
     },

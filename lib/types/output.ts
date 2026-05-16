@@ -138,16 +138,16 @@ export interface DiffToken {
 
 export interface AmendedClaim {
   claim_number: number;
-  /** 원문과 동일한지 (공격안에서 보정 없음일 때 true) */
-  is_same: boolean;
+  /** 원문과 동일한지 (공격안에서 보정 없음일 때 true). Mock 전용 — 백엔드는 amended_text로 판단 */
+  is_same?: boolean;
   diff_summary: string;
   /** 명세서 뒷받침 단락 ID (예: ["0012", "0018"]) */
   spec_basis: string[];
   original_text: string;
-  /** is_same=false일 때 채워짐 */
-  diff?: DiffToken[] | null;
-  /** 보정 후 청구항 텍스트 (diff에서 derived 가능하지만 명시 보존) */
+  /** 백엔드가 반환하는 보정 후 청구항 텍스트 */
   amended_text?: string | null;
+  /** Mock 전용 인라인 diff 토큰 */
+  diff?: DiffToken[] | null;
 }
 
 export interface AmendmentDraft {
@@ -161,9 +161,32 @@ export interface AmendmentResult {
   defensive_draft: AmendmentDraft;
 }
 
+// ─── 인용발명 상세 (별도 API) ────────────────────────────────────────────────
+export interface CitedArtClaim {
+  claim_number: number;
+  text: string;
+}
+
+export interface CitedArtParagraph {
+  paragraph_id: string;
+  text: string;
+}
+
+export interface CitedArtDetail {
+  cited_art_id: string;
+  document_number: string;
+  title: string;
+  applicant: string;
+  filing_date: string;
+  abstract: string;
+  key_claims: CitedArtClaim[];
+  relevant_paragraphs: CitedArtParagraph[];
+}
+
 // ─── Tool 에러 (백엔드 ToolError) ──────────────────────────────────────────
 export interface ToolError {
   tool_name: string;
-  error_message: string;
-  occurred_at: string;
+  error_type: 'llm_failure' | 'validation_error' | 'timeout';
+  message: string;
+  is_fatal: boolean;
 }

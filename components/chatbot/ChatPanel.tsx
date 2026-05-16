@@ -22,7 +22,7 @@ export function ChatPanel({ applicationNumber, onClose }: ChatPanelProps) {
   const [showSuggestions, setShowSuggestions] = useState(true);
   const listRef                   = useRef<HTMLDivElement>(null);
   const activeStrategy            = useUiStore((s) => s.activeStrategy);
-  const { messages, loading, send } = useChatbot(applicationNumber);
+  const { messages, streaming: loading, send } = useChatbot(applicationNumber);
 
   /* 새 메시지마다 자동 스크롤 */
   useEffect(() => {

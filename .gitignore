@@ -39,3 +39,7 @@ next-env.d.ts
 /test-results/
 /playwright-report/
 /blob-report/
+
+# backend env (API 키 포함 — 절대 커밋 금지)
+/backend/.env
+/backend/.env.*

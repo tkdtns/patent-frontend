@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { ChatPanel } from './ChatPanel';
+import { ChatDrawer } from './ChatDrawer';
 
 interface ChatbotFabProps {
   applicationNumber: string;
@@ -12,11 +12,12 @@ export function ChatbotFab({ applicationNumber }: ChatbotFabProps) {
 
   return (
     <>
-      {/* 플로팅 버튼 */}
+      {/* 플로팅 액션 버튼 */}
       <button
         onClick={() => setOpen((o) => !o)}
         title="AI 챗봇 열기"
         aria-label="AI 챗봇"
+        aria-expanded={open}
         data-testid="chatbot-fab"
         className="fixed bottom-7 right-7 w-[52px] h-[52px] rounded-full bg-accent border-none cursor-pointer text-[22px] z-[1000] transition-transform hover:scale-110"
         style={{ boxShadow: '0 4px 20px rgba(29,78,216,0.35)' }}
@@ -24,13 +25,12 @@ export function ChatbotFab({ applicationNumber }: ChatbotFabProps) {
         {open ? '✕' : '💬'}
       </button>
 
-      {/* 채팅 패널 */}
-      {open && (
-        <ChatPanel
-          applicationNumber={applicationNumber}
-          onClose={() => setOpen(false)}
-        />
-      )}
+      {/* 480px 우측 슬라이드 드로어 */}
+      <ChatDrawer
+        applicationNumber={applicationNumber}
+        open={open}
+        onClose={() => setOpen(false)}
+      />
     </>
   );
 }

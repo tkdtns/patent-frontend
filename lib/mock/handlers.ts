@@ -13,10 +13,13 @@ import type {
   StartAnalysisResponse,
   ApplyEditRequest,
   RevertEditRequest,
+  RerunAmendmentRequest,
+  RerunStrategyRequest,
 } from '../types/analysis';
-import type { ChatRequest, ChatResponse } from '../types/chat';
+import type { ChatRequest, ChatResponse, StreamChatCallbacks } from '../types/chat';
 import type { StreamCallbacks } from '../api/stream';
-import { MOCK_ANALYSIS } from './data';
+import type { CitedArtDetail } from '../types/output';
+import { MOCK_ANALYSIS, MOCK_CITED_ART_DETAILS } from './data';
 import { simulateProgress } from './stream-simulator';
 
 const delay = (ms: number) => new Promise((r) => setTimeout(r, ms));
@@ -63,13 +66,62 @@ async function applyEdit(
     application_number: applicationNumber,
     version: MOCK_ANALYSIS.version + 1,
     edit_log: [
-      ...MOCK_ANALYSIS.edit_log,
+      ...(MOCK_ANALYSIS.edit_log ?? []),
       {
         timestamp: new Date().toISOString(),
-        action: req.action,
-        target: req.target_path,
-        reason: req.reason,
-        previous_value: null,
+        target_path: req.target_path,
+        before: '',
+        after: req.new_value,
+        source: 'user-direct' as const,
+        user_instruction: req.user_instruction ?? null,
+      },
+    ],
+  };
+  return updated;
+}
+
+async function rerunStrategy(
+  applicationNumber: string,
+  req: RerunStrategyRequest,
+): Promise<AnalysisResult> {
+  await delay(1500);
+  const updated: AnalysisResult = {
+    ...MOCK_ANALYSIS,
+    application_number: applicationNumber,
+    version: MOCK_ANALYSIS.version + 1,
+    edit_log: [
+      ...(MOCK_ANALYSIS.edit_log ?? []),
+      {
+        timestamp: new Date().toISOString(),
+        target_path: 'strategy+amendment',
+        before: '(이전 전략·보정안)',
+        after: '(재생성)',
+        source: 'llm-rerun' as const,
+        user_instruction: req.user_instruction,
+      },
+    ],
+  };
+  return updated;
+}
+
+async function rerunAmendment(
+  applicationNumber: string,
+  req: RerunAmendmentRequest,
+): Promise<AnalysisResult> {
+  await delay(1200); // LLM 호출 시뮬레이션
+  const updated: AnalysisResult = {
+    ...MOCK_ANALYSIS,
+    application_number: applicationNumber,
+    version: MOCK_ANALYSIS.version + 1,
+    edit_log: [
+      ...(MOCK_ANALYSIS.edit_log ?? []),
+      {
+        timestamp: new Date().toISOString(),
+        target_path: 'amendment',
+        before: '(이전 보정안)',
+        after: '(재생성)',
+        source: 'llm-rerun' as const,
+        user_instruction: req.user_instruction,
       },
     ],
   };
@@ -85,6 +137,18 @@ async function revertEdit(
     ...MOCK_ANALYSIS,
     application_number: applicationNumber,
   };
+}
+
+async function getCitedArtDetail(
+  _applicationNumber: string,
+  citedArtId: string,
+): Promise<CitedArtDetail> {
+  await delay(200);
+  const detail = MOCK_CITED_ART_DETAILS[citedArtId];
+  if (!detail) {
+    throw new Error(`인용발명 '${citedArtId}' 을 찾을 수 없습니다.`);
+  }
+  return detail;
 }
 
 async function chat(
@@ -104,13 +168,71 @@ async function chat(
   };
 }
 
+function streamChat(
+  _applicationNumber: string,
+  req: ChatRequest,
+  callbacks: StreamChatCallbacks,
+): () => void {
+  const lastUser = [...req.messages].reverse().find((m) => m.role === 'user');
+  const userText = lastUser?.content ?? '';
+
+  // 재실행 의도 감지
+  const wantsStrategyRerun = /전략.*다시|전략.*재생성|전략.*바꿔|전략.*수정|다른.*전략/.test(userText);
+  const wantsAmendmentRerun = /보정.*다시|보정.*재생성|보정.*수정|청구항.*다시/.test(userText);
+
+  const fullText = lastUser
+    ? wantsStrategyRerun
+      ? `알겠습니다. "${userText.slice(0, 30)}" 요청을 바탕으로 전략을 재수립하겠습니다. 아래 버튼을 클릭하면 Tool 5(전략)와 Tool 6(보정안)을 요청사항에 맞게 다시 생성합니다.`
+      : wantsAmendmentRerun
+        ? `네, 보정청구항을 다시 생성하겠습니다. "${userText.slice(0, 30)}" 요청을 반영합니다. 아래 버튼을 클릭하면 Tool 6(보정안)만 재실행됩니다.`
+        : `[Mock 스트리밍] "${userText.slice(0, 30)}..."에 대한 답변입니다. 활성 전략은 ${req.active_strategy}이며, 현재 분석에서 핵심 불일치는 구성요소 1-A(슬러리 농도)입니다. 해당 구성요소는 인용발명 대비 수치 범위가 명확히 구분되므로 진보성 주장이 가능합니다.`
+    : '[Mock 스트리밍] 질문을 입력해 주세요.';
+
+  const tokens = fullText.split('');
+  let cancelled = false;
+  const timers: ReturnType<typeof setTimeout>[] = [];
+
+  tokens.forEach((char, i) => {
+    timers.push(setTimeout(() => {
+      if (!cancelled) callbacks.onToken(char);
+    }, i * 18));
+  });
+
+  const endDelay = tokens.length * 18 + 100;
+
+  // 재실행 proposal 전달
+  if ((wantsStrategyRerun || wantsAmendmentRerun) && callbacks.onRerunProposal) {
+    timers.push(setTimeout(() => {
+      if (!cancelled) {
+        callbacks.onRerunProposal!([{
+          tool_name: wantsStrategyRerun ? 'strategy' : 'amendment',
+          instruction: userText,
+        }]);
+      }
+    }, endDelay));
+  }
+
+  timers.push(setTimeout(() => {
+    if (!cancelled) callbacks.onDone?.();
+  }, endDelay + 50));
+
+  return () => {
+    cancelled = true;
+    timers.forEach(clearTimeout);
+  };
+}
+
 export const mockHandlers = {
   startAnalysis,
   getAnalysis,
   subscribeProgress,
   applyEdit,
   revertEdit,
+  rerunAmendment,
+  rerunStrategy,
   chat,
+  streamChat,
+  getCitedArtDetail,
   /** 테스트용 */
   _lastAnalysisId: () => lastAnalysisId,
 };

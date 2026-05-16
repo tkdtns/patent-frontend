@@ -17,10 +17,10 @@
  */
 
 import { config } from '../config';
-import { startAnalysis, getAnalysis } from './analysis';
+import { startAnalysis, getAnalysis, getCitedArtDetail, rerunAmendment, rerunStrategy } from './analysis';
 import { subscribeProgress } from './stream';
 import { applyEdit, revertEdit } from './edits';
-import { chat } from './chat';
+import { chat, streamChat } from './chat';
 import { mockHandlers } from '../mock/handlers';
 
 /**
@@ -35,6 +35,10 @@ export interface ApiSurface {
   applyEdit: typeof applyEdit;
   revertEdit: typeof revertEdit;
   chat: typeof chat;
+  streamChat: typeof streamChat;
+  getCitedArtDetail: typeof getCitedArtDetail;
+  rerunAmendment: typeof rerunAmendment;
+  rerunStrategy: typeof rerunStrategy;
 }
 
 const realApi: ApiSurface = {
@@ -44,6 +48,10 @@ const realApi: ApiSurface = {
   applyEdit,
   revertEdit,
   chat,
+  streamChat,
+  getCitedArtDetail,
+  rerunAmendment,
+  rerunStrategy,
 };
 
 const mockApi: ApiSurface = {
@@ -53,6 +61,10 @@ const mockApi: ApiSurface = {
   applyEdit: mockHandlers.applyEdit,
   revertEdit: mockHandlers.revertEdit,
   chat: mockHandlers.chat,
+  streamChat: mockHandlers.streamChat,
+  getCitedArtDetail: mockHandlers.getCitedArtDetail,
+  rerunAmendment: mockHandlers.rerunAmendment,
+  rerunStrategy: mockHandlers.rerunStrategy,
 };
 
 export const api: ApiSurface = config.useMock ? mockApi : realApi;

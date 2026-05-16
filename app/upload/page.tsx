@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { UploadDropzone } from '@/components/upload/UploadDropzone';
 import { PreparedFileList, type PreparedFile } from '@/components/upload/PreparedFileList';
 import { api } from '@/lib/api';
+import { config } from '@/lib/config';
 
 /** 업로드된 File 객체를 PreparedFile 메타데이터로 변환 */
 function toMeta(file: File): PreparedFile {
@@ -34,13 +35,19 @@ const DEMO_FILES: PreparedFile[] = [
 
 export default function UploadPage() {
   const router = useRouter();
-  const [appNum, setAppNum] = useState('10-2014-0036561');
-  const [files, setFiles] = useState<PreparedFile[]>(DEMO_FILES);
+  const [appNum, setAppNum] = useState(config.useMock ? '10-2014-0036561' : '');
+  const [files, setFiles] = useState<PreparedFile[]>(config.useMock ? DEMO_FILES : []);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const handleFiles = (newFiles: File[]) => {
     setFiles((prev) => [...prev, ...newFiles.map(toMeta)]);
+  };
+
+  const handleTypeChange = (index: number, type: PreparedFile['type']) => {
+    setFiles((prev) =>
+      prev.map((f, i) => (i === index ? { ...f, type } : f)),
+    );
   };
 
   const handleStart = async () => {
@@ -102,6 +109,7 @@ export default function UploadPage() {
         <PreparedFileList
           files={files}
           onRemove={(i) => setFiles((prev) => prev.filter((_, idx) => idx !== i))}
+          onTypeChange={handleTypeChange}
         />
 
         {/* 에러 */}

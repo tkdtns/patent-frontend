@@ -13,10 +13,19 @@ import type {
 
 export interface EditLogEntry {
   timestamp: string;
-  action: string;
-  target: string;
-  reason: string | null;
-  previous_value: string | null;
+  target_path: string;
+  before: string;
+  after: string;
+  source: 'user-direct' | 'llm-proposed-user-applied' | 'regenerate' | 'llm-rerun';
+  user_instruction: string | null;
+}
+
+export interface RerunAmendmentRequest {
+  user_instruction: string;
+}
+
+export interface RerunStrategyRequest {
+  user_instruction: string;
 }
 
 export interface AnalysisResult {
@@ -32,7 +41,8 @@ export interface AnalysisResult {
   strategy: StrategyResult;
   amendment: AmendmentResult;
 
-  edit_log: EditLogEntry[];
+  /** 별도 edits.log 파일에 저장되므로 API 응답에는 포함되지 않을 수 있음 */
+  edit_log?: EditLogEntry[];
 }
 
 export interface StartAnalysisRequest {
@@ -50,10 +60,9 @@ export interface StartAnalysisResponse {
 }
 
 export interface ApplyEditRequest {
-  action: string;
   target_path: string;
   new_value: string;
-  reason: string | null;
+  user_instruction?: string | null;
 }
 
 export interface RevertEditRequest {

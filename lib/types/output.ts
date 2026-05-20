@@ -30,10 +30,15 @@ export interface CitedArtRef {
  * 통지서 구성비교표 행. 일부 통지서에만 존재할 수 있다.
  */
 export interface ExaminerChartRow {
+  /** 비교 행 고유 ID (예: "1-1", "제1항-구성1") */
+  comparison_id?: string;
+  /** 대상 청구항 번호 */
+  claim_number?: number;
   element_label: string;
   our_claim_text: string;
   prior_art_text: string;
   prior_art_id: string;
+  prior_art_location?: string | null;
   examiner_match: Match;
   note: string | null;
 }
@@ -88,6 +93,8 @@ export interface SpecMappingResult {
 
 // ─── Tool 4: Claim Chart ──────────────────────────────────────────────────
 export interface ClaimChartRow {
+  /** 비교 행 고유 ID (예: "C0001") */
+  comparison_id?: string;
   element_id: string;
   element_text: string;
   prior_art_id: string;

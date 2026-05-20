@@ -9,7 +9,24 @@ import type {
   ClaimChartResult,
   StrategyResult,
   AmendmentResult,
+  RejectionType,
 } from './output';
+
+// ─── Tool 4.5: 청구항 결론 ─────────────────────────────────────────────────
+export type ClaimVerdict = '동의' | '부분동의' | '부정';
+
+export interface ClaimConclusionItem {
+  claim_number: number;
+  rejection_type: RejectionType;
+  /** 여러 거절이유가 병합된 경우 원본 타입 목록 */
+  merged_from: RejectionType[];
+  our_verdict: ClaimVerdict;
+  our_reasoning: string;
+}
+
+export interface ClaimConclusion {
+  items: ClaimConclusionItem[];
+}
 
 export interface EditLogEntry {
   timestamp: string;
@@ -41,6 +58,14 @@ export interface AnalysisResult {
   strategy: StrategyResult;
   amendment: AmendmentResult;
 
+  /** 청구항별 거절이유 결론 (Tool 4 이후 생성, 선택적) */
+  claim_conclusion?: ClaimConclusion;
+  /** 분석에 사용된 LLM 모델 식별자 */
+  llm_model?: string;
+  /** 소스 파일 정보 */
+  source_files?: Record<string, unknown>;
+  /** 파이프라인 실행 중 발생한 에러 목록 */
+  errors?: unknown[];
   /** 별도 edits.log 파일에 저장되므로 API 응답에는 포함되지 않을 수 있음 */
   edit_log?: EditLogEntry[];
 }

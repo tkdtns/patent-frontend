@@ -19,7 +19,7 @@ import type {
 import type { ChatRequest, ChatResponse, StreamChatCallbacks } from '../types/chat';
 import type { StreamCallbacks } from '../api/stream';
 import type { CitedArtDetail } from '../types/output';
-import { MOCK_ANALYSIS, MOCK_CITED_ART_DETAILS } from './data';
+import { MOCK_ANALYSIS, MOCK_ANALYSIS_2, MOCK_CITED_ART_DETAILS } from './data';
 import { simulateProgress } from './stream-simulator';
 
 const delay = (ms: number) => new Promise((r) => setTimeout(r, ms));
@@ -39,12 +39,18 @@ async function startAnalysis(
   };
 }
 
+/** application_number로 적합한 mock fixture 선택 */
+function pickMock(applicationNumber: string): AnalysisResult {
+  if (applicationNumber === MOCK_ANALYSIS_2.application_number) return MOCK_ANALYSIS_2;
+  return MOCK_ANALYSIS;
+}
+
 async function getAnalysis(
   applicationNumber: string,
 ): Promise<AnalysisResult> {
   await delay(250);
   return {
-    ...MOCK_ANALYSIS,
+    ...pickMock(applicationNumber),
     application_number: applicationNumber,
   };
 }
@@ -61,12 +67,13 @@ async function applyEdit(
   req: ApplyEditRequest,
 ): Promise<AnalysisResult> {
   await delay(800);
+  const base = pickMock(applicationNumber);
   const updated: AnalysisResult = {
-    ...MOCK_ANALYSIS,
+    ...base,
     application_number: applicationNumber,
-    version: MOCK_ANALYSIS.version + 1,
+    version: base.version + 1,
     edit_log: [
-      ...(MOCK_ANALYSIS.edit_log ?? []),
+      ...(base.edit_log ?? []),
       {
         timestamp: new Date().toISOString(),
         target_path: req.target_path,
@@ -85,12 +92,13 @@ async function rerunStrategy(
   req: RerunStrategyRequest,
 ): Promise<AnalysisResult> {
   await delay(1500);
+  const base = pickMock(applicationNumber);
   const updated: AnalysisResult = {
-    ...MOCK_ANALYSIS,
+    ...base,
     application_number: applicationNumber,
-    version: MOCK_ANALYSIS.version + 1,
+    version: base.version + 1,
     edit_log: [
-      ...(MOCK_ANALYSIS.edit_log ?? []),
+      ...(base.edit_log ?? []),
       {
         timestamp: new Date().toISOString(),
         target_path: 'strategy+amendment',
@@ -109,12 +117,13 @@ async function rerunAmendment(
   req: RerunAmendmentRequest,
 ): Promise<AnalysisResult> {
   await delay(1200); // LLM 호출 시뮬레이션
+  const base = pickMock(applicationNumber);
   const updated: AnalysisResult = {
-    ...MOCK_ANALYSIS,
+    ...base,
     application_number: applicationNumber,
-    version: MOCK_ANALYSIS.version + 1,
+    version: base.version + 1,
     edit_log: [
-      ...(MOCK_ANALYSIS.edit_log ?? []),
+      ...(base.edit_log ?? []),
       {
         timestamp: new Date().toISOString(),
         target_path: 'amendment',
@@ -134,7 +143,7 @@ async function revertEdit(
 ): Promise<AnalysisResult> {
   await delay(500);
   return {
-    ...MOCK_ANALYSIS,
+    ...pickMock(applicationNumber),
     application_number: applicationNumber,
   };
 }
